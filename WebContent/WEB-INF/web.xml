@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+ <!-- 配置Spring的核心监听器 -->
+ <listener>
+ 	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+ </listener>
+ 
+ <context-param>
+ 	<param-name>contextConfigLocation</param-name>
+ 	<param-value>classpath:applicationContext.xml</param-value>
+ </context-param>
+ 
+ <!-- 配置Struts2的核心过滤器 -->
+ <filter>
+ 	<filter-name>struts2</filter-name>
+ 	<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+ </filter>
+ 
+ <filter-mapping>
+     <!-- 默认只拦截 请求 -->
+ 	<filter-name>struts2</filter-name>
+ 	<url-pattern>/*</url-pattern>
+ 	<!-- 配置 可以拦截 请求和转发 -->
+ 	<dispatcher>REQUEST</dispatcher>
+ 	<dispatcher>FORWARD</dispatcher>
+ </filter-mapping>
+ 
+ 
+  <display-name></display-name>	
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

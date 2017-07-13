@@ -1,0 +1,29 @@
+///////////////项目过程//////////////////////////
+1:SSH框架jar包引用
+2:邮件mailjar包使用及注册部分的MailServer服务器引用
+3：Web.xml中Struts2和Spring和核心拦截器配置
+4：前台页面安全保护机制放在WEB-INF下，后台页面和资源文件可放于外部WebContent下
+5：web.xml中对拦截类型的配置，首页请求转发
+6：静态页面.html转换成动态页面.jsp
+7:数据校验的jsp中前台校验，ajax异步后台校验，xwork框架后台校验数据回传页面<s:fielderror fieldName="repassword" />
+8：Struts2框架的标签库在页面引用  <%@ taglib uri="/struts-tags" prefix="s"%>
+9：Struts2值栈存取数据Session存取以及在页面的数据获取遍历 <s:iterator  //数据判读 <s:if等
+10：购物车与购物项的本地Session存取，订单与订单项的数据库存取
+11：Action中的模型驱动配置
+12：页面传递参数给Action中的字段 ，jsp中from表单的隐藏字段<input type="hidden"等
+13: Hibernate分页查询 使用自定义封装的接口回调
+14：oracle数据库不能使用ui作为表的字段
+15：多对多的表结构拆分为两个一对多 操作   使用中间表 来连接    注意中间表是否带有逻辑处理   如订单表与商品关系
+16：一对多的数据库操作  一级分类与二级分类  二级分类与商品的标记删除修改操作  数据库配置   一级分类实体类存放二级对象而不是其id 
+17：页面传参数  实体类配置  模型驱动接受  注意构造器使用
+18：ajax异步操作访问action可返回一个页面 局部刷新  如后天管理员查询订单详情  订单详情的订单项用表格异步显示在一个div中
+19：拦截器的配置 操作权限校验 
+20:资源路径 action访问的绝对路径${pageContent.request.contextPath}/...action
+21:Struts2文件上传的必须格式：表单post escape属性 以及上传input的那么匹配  文件上传的逻辑处理
+22：使用dTree插件来作为后台的分类导航栏布局
+23：适当使用时间戳防止Session缓存对及时性数据操作失效
+24：付款支付模块的第三方插件易宝引入使用
+25：登录注册部分 验证码的生成引入操作
+26：常用数据保存Session，固定导航栏通过外部引入文件实现
+27：Spring配置文件 c3p0连接池,引入外部配置  ioc配置  SessionFractory配置
+28：按功能模块分包

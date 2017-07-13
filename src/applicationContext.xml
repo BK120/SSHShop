@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!--=============================== 配置连接池: ================================-->
+	<!-- 引入外部属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	<!-- 配置C3P0连接池: -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.user}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+	
+	<!-- =========================Hibernate的相关信息 =====================-->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!-- 注入连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 配置Hibernate的其他的属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.connection.autocommit">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		<!-- Hibernate映射相关文件 -->
+		<property name="mappingResources">
+		    <list>
+		        <value>com/bk120/sshshop/user/vo/User.hbm.xml</value>
+		        <value>com/bk120/sshshop/category/vo/Category.hbm.xml</value>
+		        <value>com/bk120/sshshop/categorysecond/vo/CategorySecond.hbm.xml</value>
+		        <value>com/bk120/sshshop/product/vo/Product.hbm.xml</value>
+		        <value>com/bk120/sshshop/order/vo/Order.hbm.xml</value>
+		         <value>com/bk120/sshshop/order/vo/OrderItem.hbm.xml</value>
+		          <value>com/bk120/sshshop/adminuser/vo/AdminUser.hbm.xml</value>
+		    </list>
+		    
+		</property>
+	</bean>
+	
+	
+	<!--============================ 事务管理:============================== -->
+	<!-- 事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 开启注解事务 -->
+	<tx:annotation-driven  transaction-manager="transactionManager"/>
+	
+	<!-- ===========================Action的配置 ===========================-->
+	<!-- 首页访问Action -->
+	<bean id="indexAction" class="com.bk120.sshshop.index.action.IndexAction" scope="prototype">
+	    <property name="categoryService" ref="categoryService"></property>
+	    <property name="productService" ref="productService"></property>
+	</bean>
+	<!-- 用户注册模块Action -->
+	<bean id="userAction" class="com.bk120.sshshop.user.action.UserAction" scope="prototype">
+	    <property name="userService" ref="userService"></property>
+	</bean>
+	<!-- 验证码的Action  -->
+	<bean id="checkImgAction" class="com.bk120.sshshop.user.action.CheckImgAction" scope="prototype">
+	</bean>
+	<!-- 商品模块的Action  -->
+	<bean id="productAction" class="com.bk120.sshshop.product.action.ProductAction" scope="prototype">
+	    <property name="productService" ref="productService"></property>
+	    <property name="categoryService" ref="categoryService"></property>
+	</bean>
+	<!-- 购物车的Action -->
+	<bean id="cartAction" class="com.bk120.sshshop.cart.action.CartAction" scope="prototype">
+	     <property name="productService" ref="productService"></property>
+	</bean>
+	<!-- 订单的的Action -->
+	<bean id="orderAction" class="com.bk120.sshshop.order.action.OrderAction" scope="prototype">
+	     <property name="orderService" ref="orderService"></property>
+	</bean>
+	<!-- 后台操作的的Action -->
+	<bean id="adminUserAction" class="com.bk120.sshshop.adminuser.action.AdminUserAction" scope="prototype">
+	     <property name="adminUserService" ref="adminUserService"></property>
+	</bean>
+	<!-- 后台一级分类管理Action -->
+	<bean id="adminCategoryAction" class="com.bk120.sshshop.category.adminaction.AdminCategoryAction" scope="prototype">
+	     <property name="categoryService" ref="categoryService"></property>
+	</bean>
+	<!-- 后台二级分类管理Action -->
+	<bean id="adminCategorySecondAction" class="com.bk120.sshshop.categorysecond.adminaction.AdminCategorySecondAction" scope="prototype">
+	     <property name="categorySecondService" ref="categorySecondService"></property>
+	     <property name="categoryService" ref="categoryService"></property>
+	</bean>
+	<!-- 后台商品管理Action -->
+	<bean id="adminProductAction" class="com.bk120.sshshop.product.adminaction.AdminProductAction" scope="prototype">
+	     <property name="productService" ref="productService"></property>
+	      <property name="categorySecondService" ref="categorySecondService"></property>
+	</bean>
+	<!-- 后台订单管理Action -->
+	<bean id="adminOrderAction" class="com.bk120.sshshop.order.adminaction.AdminOrderAction" scope="prototype">
+	     <property name="orderService" ref="orderService"></property>
+	</bean>
+	<!-- 后台对前台用户的管理Action -->
+	<bean id="adminToUserAction" class="com.bk120.sshshop.user.adminaction.AdminToUserAction" scope="prototype">
+	     <property name="userService" ref="userService"></property>
+	</bean>
+	
+	<!-- =======================Service的配置  ===========================-->
+	<!-- 用户业务层 -->
+	<bean id="userService" class="com.bk120.sshshop.user.service.UserService">
+	    <property name="userDao" ref="userDao"></property>
+	</bean>
+	<!-- 一级分类业务层 -->
+	<bean id="categoryService" class="com.bk120.sshshop.category.service.CategoryService">
+	    <property name="categoryDao" ref="categoryDao"></property>
+	</bean>
+	<!-- 商品业务层 -->
+	<bean id="productService" class="com.bk120.sshshop.product.service.ProductService">
+	    <property name="productDao" ref="productDao"></property>
+	</bean>
+	<!-- 订单业务层 -->
+	<bean id="orderService" class="com.bk120.sshshop.order.service.OrderService">
+	    <property name="orderDao" ref="orderDao"></property>
+	</bean>
+	<!-- 后台操作业务层 -->
+	<bean id="adminUserService" class="com.bk120.sshshop.adminuser.service.AdminUserService">
+	    <property name="adminUserDao" ref="adminUserDao"></property>
+	</bean>
+	<!-- 二级分类操作业务层 -->
+	<bean id="categorySecondService" class="com.bk120.sshshop.categorysecond.service.CategorySecondService">
+	    <property name="categorySecondDao" ref="categorySecondDao"></property>
+	</bean>
+	
+	
+	
+	<!-- =============================Dao的配置  ===========================-->
+	<!-- 用户模块持久层 -->
+	<bean id="userDao" class="com.bk120.sshshop.user.dao.UserDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>	    
+	</bean>
+	<!-- 一级分类持久层 -->
+	<bean id="categoryDao" class="com.bk120.sshshop.category.dao.CategoryDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>	    
+	</bean>
+	<!-- 商品持久层 -->
+	<bean id="productDao" class="com.bk120.sshshop.product.dao.ProductDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>	    
+	</bean>
+	<!-- 订单持久层 -->
+	<bean id="orderDao" class="com.bk120.sshshop.order.dao.OrderDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>	    
+	</bean>
+	<!-- 后台用户持久层 -->
+	<bean id="adminUserDao" class="com.bk120.sshshop.adminuser.dao.AdminUserDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>	    
+	</bean>
+	<!-- 二级分类持久层 -->
+	<bean id="categorySecondDao" class="com.bk120.sshshop.categorysecond.dao.CategorySecondDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>	    
+	</bean>
+	
+</beans>

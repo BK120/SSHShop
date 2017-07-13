@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    
+
+    <constant name="struts.devMode" value="false" />
+    
+    <package name="sshshop" extends="struts-default" namespace="/">
+        
+        <interceptors>
+        <!-- 定义拦截器 -->
+            <interceptor name="PrevilegeInterceptor" class="com.bk120.sshshop.interceptor.PrevilegeInterceptor"></interceptor>
+            <!-- 定义拦截器栈 -->
+            <interceptor-stack name="adminUserInterceptor">
+                <interceptor-ref name="PrevilegeInterceptor"/>
+    			<interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        
+          <!-- 全局 拦截器使用 对该包下的所有Action拦截 -->
+        <!--  <default-interceptor-ref name="adminUserInterceptor" />  -->
+         
+         
+        <!-- 配置全局的返回结果  任何的方法都可以调用  只要返回结果为msg -->
+        <global-results>
+            <!-- 返回注册之后的消息界面  提示接下来的去向 -->
+            <result name="msg" >/WEB-INF/jsp/msg.jsp</result>
+             <result name="login" >/WEB-INF/jsp/login.jsp</result>
+             <result name="loginFail">/admin/index.jsp</result>
+        </global-results>
+        
+        
+        <!-- 配置首页访问Action -->
+        <action name="index" class="indexAction">
+            <result name="index" >/WEB-INF/jsp/index.jsp</result>
+        </action>
+        <!-- 配置用户模块的Action -->
+         <action name="user_*" class="userAction" method="{1}">
+            <result name="registPage" >/WEB-INF/jsp/regist.jsp</result>
+            <!-- 校验不成功回到 刚才的界面 -->
+            <result name="input" >/WEB-INF/jsp/regist.jsp</result>
+            <!-- 跳转用户登录界面 -->
+            <result name="loginPage" >/WEB-INF/jsp/login.jsp</result>
+            <!-- 登录失败  回调 -->
+             <result name="login" >/WEB-INF/jsp/login.jsp</result>
+             <!-- 登录成功 去主页 -->
+             <result name="loginSuccess" type="redirectAction">index</result>
+             <!-- 退出用户 -->
+             <result name="quit" type="redirectAction">index</result>
+
+        </action>
+        <!-- 验证码的Action -->
+        <action name="checkImg" class="checkImgAction">
+        </action>
+        <!-- 配置商品模块的Action -->
+         <action name="product_*" class="productAction" method="{1}">
+             <result name="findByPid">/WEB-INF/jsp/product.jsp</result>
+             <!-- 所有一级分类的商品页面 -->
+             <result name="findByCid">/WEB-INF/jsp/productList.jsp</result>
+              <!-- 所有二级分类的商品页面 -->
+             <result name="findByCsid">/WEB-INF/jsp/productList.jsp</result>
+        </action>
+        <!-- 购物车的Action -->
+         <action name="cart_*" class="cartAction" method="{1}">
+             <!-- 添加购物项到购物车  和  清空购物项    删除购物项 和跳转到购物车  -->
+             <result name="addCart">/WEB-INF/jsp/cart.jsp</result>
+        </action>
+        <!-- 订单的Action -->
+         <action name="order_*" class="orderAction" method="{1}">
+             <!-- 添加购物项到购物车  和  清空购物项    删除购物项 和跳转到购物车  -->
+             <result name="saveSuccess">/WEB-INF/jsp/order.jsp</result>
+             <result name="findByUsidSuccess">/WEB-INF/jsp/orderList.jsp</result>
+             <!-- 由我的订单页面返回至付款 -->
+             <result name="findByOidSuccess">/WEB-INF/jsp/order.jsp</result>
+              <!-- 修改订单状态 确认收货-->
+             <result name="updateStateSuccess" type="redirectAction">order_findByUsid.action?page=1</result>
+        </action>
+         <!-- 后台管理员操作Action -->
+         <action name="adminUser_*" class="adminUserAction" method="{1}">
+             
+             <result name="saveSuccess">/WEB-INF/jsp/order.jsp</result>
+               <result name="loginSuccess" type="redirect">/admin/home.jsp</result>
+        </action>
+        <!-- 后台一级分类管理Action -->
+         <action name="adminCategory_*" class="adminCategoryAction" method="{1}">
+             <result name="findAll">/admin/category/list.jsp</result>
+             <!--  添加一个一级分类  重定向至一个Action -->
+             <result name="saveSuccess" type="redirectAction">adminCategory_findAll.action</result>
+             <!-- 删除一个一级分类 -->
+             <result name="deleteSuccess" type="redirectAction">adminCategory_findAll.action</result>
+             <!-- 进入修改一级分类的页面 -->
+             <result name="eidtSuccess">/admin/category/edit.jsp</result>
+             <!-- 后台修改一级分类   -->
+             <result name="updateSuccess" type="redirectAction">adminCategory_findAll.action</result>
+             
+        </action>
+        <!-- 后台二级分类管理Action -->
+         <action name="adminCategorySecond_*" class="adminCategorySecondAction" method="{1}">
+             <result name="findAll">/admin/categorysecond/list.jsp</result>
+             <!-- 跳转到二级分类页面 -->
+             <result name="addPageSuccess">/admin/categorysecond/add.jsp</result>
+             <!-- 添加二级分类成功 -->
+             <result name="saveSuccess" type="redirectAction">adminCategorySecond_findAll.action?page=1</result>
+             <!-- 删除一个二级分类-->
+             <result name="deleteSuccess" type="redirectAction">adminCategorySecond_findAll.action?page=1</result>
+             <!-- 编辑一个二级分类-->
+             <result name="editSuccess">/admin/categorysecond/edit.jsp</result>
+              <!-- 修改成功一个二级分类-->
+              <result name="updateSuccess" type="redirectAction">adminCategorySecond_findAll.action?page=1</result>
+              
+        </action>
+        <!-- 后台商品管理Action -->
+         <action name="adminProduct_*" class="adminProductAction" method="{1}">
+             <!-- 查询所有商品 -->
+             <result name="findAll">/admin/product/list.jsp</result>
+             <!-- 跳转到添加所有商品的页面 -->
+              <result name="addPageSuccess">/admin/product/add.jsp</result>
+              <!-- 保存商品成功 -->
+               <result name="saveSuccess" type="redirectAction">adminProduct_findAll.action?page=1</result>
+                <!-- 删除商品成功 -->
+               <result name="deleteSuccess" type="redirectAction">adminProduct_findAll.action?page=1</result>
+               <!-- 跳转到编辑商品yemian -->
+               <result name="editSuccess">/admin/product/edit.jsp</result>
+               <!-- 修改商品成功 -->
+               <result name="updateSuccess" type="redirectAction">adminProduct_findAll.action?page=1</result>
+               
+        </action>
+        <!-- 后台订单管理Action -->
+         <action name="adminOrder_*" class="adminOrderAction" method="{1}">
+             <!-- 查询所有订单 -->
+             <result name="findAll">/admin/order/list.jsp</result>
+             <!-- 查询所有订单订单项显示 -->
+             <result name="findOrderItem">/admin/order/orderitem.jsp</result>
+             <!-- 修改订单状态成功-->
+             <result name="updateStateSuccess" type="redirectAction">adminOrder_findAll.action?page=1</result>
+             
+        </action>
+         <!-- 后台对前台用户的管理Action -->
+         <action name="adminToUser_*" class="adminToUserAction" method="{1}">
+             <!-- 查询所有订单 -->
+             <result name="findAll">/admin/user/list.jsp</result>
+             <!-- 跳转到用户修改界面 -->
+             <result name="editSuccess">/admin/user/edit.jsp</result>
+              <!-- 修改用户成功 -->
+             <result name="updateSuccess" type="redirectAction">adminToUser_findAll.action?page=1</result>
+             <!-- 使用此拦截器  不起作用？ -->  
+            <interceptor-ref name="adminUserInterceptor" />  
+        </action>
+        
+        
+    </package>
+    
+</struts>

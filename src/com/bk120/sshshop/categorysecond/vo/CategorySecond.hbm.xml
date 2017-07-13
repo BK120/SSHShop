@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bk120.sshshop.categorysecond.vo.CategorySecond" table="webshop_categorysecond">
+        <id name="csid">
+            <generator class="native"></generator>
+        </id>
+        <property name="csname"></property>
+        <!-- 关联一级分类多对一  多个二级分类对应于一个一级分类 -->
+        <many-to-one name="category" lazy="false" class="com.bk120.sshshop.category.vo.Category" column="cid"></many-to-one>
+        <!-- 一对多 二级分类关联商品 -->
+        <set name="products">
+            <key column="csid"/>
+            <one-to-many class="com.bk120.sshshop.product.vo.Product"/>
+            
+        </set>
+        
+    </class>
+    
+</hibernate-mapping>

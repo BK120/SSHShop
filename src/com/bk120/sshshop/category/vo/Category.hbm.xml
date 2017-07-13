@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bk120.sshshop.category.vo.Category" table="webshop_category">
+        <id name="cid">
+            <generator class="native"></generator>
+        </id>
+        <property name="cname"></property>
+        <!-- 配置二级分类集合   一对多  lazy不延迟加载  实时数据更新   order_by并且 按csid排序 防止set无序 每次刷新页面不同-->
+        <set name="categorySeconds" lazy="false"  order-by="csid" cascade="delete">
+            <key column="cid"/>
+            <one-to-many class="com.bk120.sshshop.categorysecond.vo.CategorySecond"/>
+            
+        </set>
+    </class>
+    
+</hibernate-mapping>
