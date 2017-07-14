@@ -13,4 +13,5 @@
 <h4>后端界面:</h4>   
 
 ![](https://github.com/BK120/SSHShop/blob/master/screenshot/f5.jpg)<hr/>  
-![](https://github.com/BK120/SSHShop/blob/master/screenshot/f6.jpg) 
+![](https://github.com/BK120/SSHShop/blob/master/screenshot/f6.jpg)<hr/>  
+<h5>存在的一个问题：SSH框架在后端管理员应用处使用到拦截器进行用户非登录操作拦截失败，单独使用Struts2框架拦截器可用，三个框架集成使用失败，目前原因不明！</h5> 
