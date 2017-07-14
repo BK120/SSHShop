@@ -6,10 +6,11 @@
 <h4>下面为一些项目截图 :</h4>    
 <h4>前端界面:</h4>  
 
-![](https://github.com/BK120/SSHShop/blob/master/screenshot/f1.jpg)  
-![](https://github.com/BK120/SSHShop/blob/master/screenshot/f2.jpg)  
-![](https://github.com/BK120/SSHShop/blob/master/screenshot/f3.jpg) 
-![](https://github.com/BK120/SSHShop/blob/master/screenshot/f4.jpg) 
+![](https://github.com/BK120/SSHShop/blob/master/screenshot/f1.jpg)<br/>  
+![](https://github.com/BK120/SSHShop/blob/master/screenshot/f2.jpg)<br/>   
+![](https://github.com/BK120/SSHShop/blob/master/screenshot/f3.jpg)<br/>  
+![](https://github.com/BK120/SSHShop/blob/master/screenshot/f4.jpg)<br/>  
 <h4>后端界面:</h4>   
-![](https://github.com/BK120/SSHShop/blob/master/screenshot/f5.jpg) 
+
+![](https://github.com/BK120/SSHShop/blob/master/screenshot/f5.jpg)<br/>  
 ![](https://github.com/BK120/SSHShop/blob/master/screenshot/f6.jpg) 
